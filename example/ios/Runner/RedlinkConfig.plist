@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AppId</key>
+	<string>0d493042-94fa-4f69-82dc-a8f35b6f7ba3</string>
+	<key>Token</key>
+	<string>adcf9f52-3fe6-4dfd-a9a9-ca3ca58c9862</string>
+	<key>Secret</key>
+	<string>6908c777-e6ca-44e8-83d3-dcdefaa5e68b</string>
+	<key>EventsToken</key>
+	<string>CFE5887037857D44C69CF247CAE09B20A2FAAEC31C2A6AFCBFCED7811A7D18EEAFA5973F1D78DE01EC2515BF29166C75CBD20E448601E6C8BA09302FF80A2860</string>
+</dict>
+</plist>

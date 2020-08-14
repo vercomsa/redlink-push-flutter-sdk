@@ -1,0 +1,25 @@
+name: redlink_flutter_sdk
+description: Flutter plugin for Redlink
+homepage: https://www.redlink.pl/mobile-push/
+version: 1.0.0-dev.1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: pl.redlink.redlink_flutter_sdk
+        pluginClass: RedlinkFlutterSdkPlugin
+      ios:
+        pluginClass: SwiftRedlinkFlutterSdkPlugin
