@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:redlink_flutter_sdk/redlink_analytics.dart';
 import 'package:redlink_flutter_sdk/redlink_messaging.dart';
+
+const Color _primaryColor = Color(0xFFD30000);
 
 void main() {
   runApp(MyApp());
@@ -11,10 +14,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool didConfigureSDK = false;
-  RedlinkMessaging sdk = RedlinkMessaging();
-  String token;
+  RedlinkMessaging _sdk = RedlinkMessaging();
+  String _token;
   Map<String, dynamic> _pushMessage;
+  String _pushMessageSource;
+  List<dynamic> _eventParameters = []..length = 1;
+  TextEditingController _eventNameEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -22,16 +27,37 @@ class _MyAppState extends State<MyApp> {
     initRedlinkSDK();
   }
 
-  initRedlinkSDK() {
-    sdk.configure(onMessage: (message) {
-      setState(() {
-        _pushMessage = message;
-      });
+  void initRedlinkSDK() async {
+    await _sdk.configure(
+      onLaunch: (message) {
+        setState(() {
+          _pushMessage = message;
+          _pushMessageSource = "onLaunch";
+        });
+      },
+      onMessage: (message) {
+        setState(() {
+          _pushMessage = message;
+          _pushMessageSource = "onMessage";
+        });
+      },
+      onResume: (message) {
+        setState(() {
+          _pushMessage = message;
+          _pushMessageSource = "onResume";
+        });
+      },
+    );
+    await _sdk.registerForPush();
+    await _sdk.getToken().then((value) {
+      setState(
+        () => _token = value,
+      );
     });
-    sdk.getToken().asStream().listen((event) {
-      setState(() {
-        token = event;
-      });
+    _sdk.onTokenRefresh.listen((value) {
+      setState(
+        () => _token = value,
+      );
     });
   }
 
@@ -40,39 +66,196 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Column(
-          children: [
-            SizedBox(
-              height: 50,
-            ),
-            Text(
-              'Push token:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+          title: const Text('Redlink Push'),
+          actions: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: Center(
-                child: token != null ? SelectableText('$token') : Text('Waiting for token request to complete'),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+              ),
+              child: FlutterLogo(),
+            ),
+          ],
+        ),
+        body: ListView(
+          padding: const EdgeInsets.symmetric(
+            vertical: 32.0,
+            horizontal: 16.0,
+          ),
+          children: [
+            _buildTokenSection(),
+            const SizedBox(
+              height: 48.0,
+            ),
+            _buildPushMessageSection(),
+            const SizedBox(
+              height: 48.0,
+            ),
+            _buildPushMessageSourceSection(),
+            const SizedBox(
+              height: 48.0,
+            ),
+            _buildEventsSection(),
+          ],
+        ),
+      ),
+      theme: Theme.of(context).copyWith(
+        primaryColor: _primaryColor,
+      ),
+    );
+  }
+
+  Widget _buildTokenSection() {
+    return Column(
+      children: [
+        Text(
+          'Push token:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          height: 4.0,
+        ),
+        Center(
+          child: _token != null
+              ? SelectableText(_token)
+              : Text('Waiting for token request to complete'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPushMessageSection() {
+    return Column(
+      children: [
+        Text(
+          'Push notification:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          height: 4.0,
+        ),
+        Center(
+          child: Text(_pushMessage != null
+              ? _pushMessage.toString()
+              : 'Waiting for push notification'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPushMessageSourceSection() {
+    return Column(
+      children: [
+        Text(
+          'Push notification source:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          height: 4.0,
+        ),
+        Center(
+          child: Text(_pushMessageSource != null
+              ? _pushMessageSource
+              : 'Waiting for push notification'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEventsSection() {
+    return Column(
+      children: [
+        Text(
+          'Send event:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          height: 4.0,
+        ),
+        TextFormField(
+          controller: _eventNameEditingController,
+          decoration: InputDecoration(
+            labelText: 'Event name',
+          ),
+        ),
+        ...List<TextFormField>.generate(
+          _eventParameters.length,
+          (index) => TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Parameter',
+            ),
+            onChanged: (value) {
+              _eventParameters[index] = value;
+            },
+          ),
+        ),
+        const SizedBox(
+          height: 16.0,
+        ),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                if (_eventNameEditingController.text.isNotEmpty) {
+                  Map<String, dynamic> parametersMap = Map.fromIterable(
+                    _eventParameters,
+                    key: (element) =>
+                        'Parameter ${_eventParameters.indexOf(element)}',
+                    value: (element) => element,
+                  );
+                  RedlinkAnalytics.trackEvent(
+                    eventName: _eventNameEditingController.text,
+                    parameters: parametersMap,
+                  );
+                }
+              },
+              child: Text(
+                'Send',
+              ),
+            ),
+            Spacer(),
+            CircleAvatar(
+              child: FloatingActionButton(
+                backgroundColor: _primaryColor,
+                child: Icon(
+                  Icons.remove,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _eventParameters.length -=
+                        _eventParameters.length > 0 ? 1 : 0;
+                  });
+                },
               ),
             ),
             SizedBox(
-              height: 50,
+              width: 4.0,
             ),
-            Text(
-              'Push notification:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: Center(
-                child: Text(_pushMessage != null ? '$_pushMessage' : 'Waiting for push notification'),
+            CircleAvatar(
+              child: FloatingActionButton(
+                backgroundColor: _primaryColor,
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _eventParameters.length += 1;
+                  });
+                },
               ),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }

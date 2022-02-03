@@ -1,43 +1,36 @@
 PODS:
   - Flutter (1.0.0)
-  - Redlink (1.1.3):
+  - Redlink (1.1.9):
     - SQLite.swift (= 0.11.5)
   - redlink_flutter_sdk (0.0.1):
     - Flutter
-    - Redlink
+    - Redlink (= 1.1.9)
   - SQLite.swift (0.11.5):
     - SQLite.swift/standard (= 0.11.5)
   - SQLite.swift/standard (0.11.5)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - Redlink (from `https://bitbucket.org/appchance/redlink-ios.git`, branch `feature/push-open`)
+  - Redlink (~> 1.1.9)
   - redlink_flutter_sdk (from `.symlinks/plugins/redlink_flutter_sdk/ios`)
 
 SPEC REPOS:
   trunk:
+    - Redlink
     - SQLite.swift
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  Redlink:
-    :branch: feature/push-open
-    :git: https://bitbucket.org/appchance/redlink-ios.git
   redlink_flutter_sdk:
     :path: ".symlinks/plugins/redlink_flutter_sdk/ios"
 
-CHECKOUT OPTIONS:
-  Redlink:
-    :commit: e9899be95fd745523ae3c2476b27c239027b370f
-    :git: https://bitbucket.org/appchance/redlink-ios.git
-
 SPEC CHECKSUMS:
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  Redlink: 4799af72453d0360cea62c44f34da17e02eadfee
-  redlink_flutter_sdk: b56289fcd89bfcff3ad484d8d84a5dc01fbff779
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Redlink: 9993bda7f34558272c3035e8152fa5baceed820f
+  redlink_flutter_sdk: bbd57f5fab143af193980e73be9bbdeae3ed4081
   SQLite.swift: 6e5356850bb1791459f8c16d6ee9195b28714a2e
 
-PODFILE CHECKSUM: 0ff7a6d662793b35a5c268910927297fc9d158a4
+PODFILE CHECKSUM: 04734f75748e8bfa6a4a75b619ade2ab7b30e9b4
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.11.2

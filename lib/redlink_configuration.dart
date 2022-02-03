@@ -1,5 +1,7 @@
 class RedlinkConfiguration {
-  bool isLoggingEnabled;
+  final bool isLoggingEnabled;
 
-  RedlinkConfiguration({this.isLoggingEnabled});
+  const RedlinkConfiguration({
+    required this.isLoggingEnabled,
+  });
 }

@@ -2,6 +2,7 @@ package pl.redlink.redlink_flutter_sdk
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import pl.redlink.push.analytics.RedlinkAnalytics
 import pl.redlink.push.manager.token.FcmTokenManager
 import pl.redlink.push.manager.user.RedlinkUser
 
@@ -15,6 +16,8 @@ object MessagingChannel {
         when (call.method) {
             MethodIdentifier.SET_USER.identifier -> setUser(call, result)
             MethodIdentifier.GET_TOKEN.identifier -> handleGetTokenMethod(call, result)
+            MethodIdentifier.REMOVE_USER.identifier -> removeUser(call, result)
+            MethodIdentifier.TRACK_EVENT.identifier -> trackEvent(call, result)
         }
     }
 
@@ -25,6 +28,19 @@ object MessagingChannel {
                 .lastName(call.stringArgument("lastName").orEmpty())
                 .phone(call.stringArgument("phone").orEmpty())
                 .save()
+        result.success(null)
+    }
+
+    private fun trackEvent(call: MethodCall, result: MethodChannel.Result) {
+        val eventName = call.stringArgument("eventName") ?: return result.error("BAD_ARGS", "`eventName` property required", null)
+        val parameters = call.argument<Map<String, Any>>("parameters") ?: return result.error("BAD_ARGS", "`parameters` property required", null)
+        RedlinkAnalytics.trackEvent(eventName, parameters)
+        result.success(null)
+    }
+
+    private fun removeUser(call: MethodCall, result: MethodChannel.Result) {
+        RedlinkUser.remove()
+        result.success(null)
     }
 
     private fun handleGetTokenMethod(call: MethodCall, result: MethodChannel.Result) {
@@ -35,10 +51,15 @@ object MessagingChannel {
             val identifier: String
     ) {
 
+        CONFIGURE_SDK("configureSDK"),
         GET_TOKEN("getToken"),
+        ON_LAUNCH("onLaunch"),
         ON_MESSAGE("onMessage"),
+        ON_RESUME("onResume"),
+        ON_TOKEN("onToken"),        
+        REMOVE_USER("removeUser"),
         SET_USER("setUser"),
-        ON_TOKEN("onToken"),
+        TRACK_EVENT("trackEvent"),
 
     }
 

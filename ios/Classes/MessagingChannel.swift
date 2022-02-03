@@ -1,34 +1,53 @@
 import Foundation
 import Redlink
 
-final class MessagingChannel {
+final class MessagingChannel: NSObject {
 
     static let channelIdentifier = "pl.redlink.sdk/channel"
 
     enum MethodIdentifier: String {
-        case configureSDK, getToken, onMessage, setUser, onToken
-    }
+        // calls
+        case configureSDK
+        case registerForPush // ios only
 
-    static var supportedMethodIdentifiers: [String] {
-        return [MethodIdentifier.configureSDK.rawValue,
-                MethodIdentifier.getToken.rawValue]
+        case getToken
+        case setUser
+        case removeUser
+        case trackEvent
+
+        // callbacks
+        case onMessage
+        case onLaunch // android only
+        case onResume
+        case onToken
+
+        case unknown
     }
 
     private static let current = MessagingChannel()
     private var channel: FlutterMethodChannel?
+
     private var token: String?
-    private var onToken: ((String) -> Void)?
-    
+    private var tokenError: Error?
+    private var onToken: ((String?, Error?) -> Void)?
+
     static var result: FlutterResult?
 
     static func handleCall(_ call: FlutterMethodCall, methodIdentifier: String, result: @escaping FlutterResult) {
-        switch methodIdentifier {
-        case MethodIdentifier.configureSDK.rawValue:
+        let method = MethodIdentifier(rawValue:  methodIdentifier)
+        switch method {
+        case .configureSDK:
             return handleConfigureSDKMethodCall(call, result: result)
-        case MethodIdentifier.setUser.rawValue:
+        case .registerForPush:
+            return handleRegisterForPushMethodCall(call, result: result)
+        case .setUser:
             return handleSetUserMethodCall(call, result: result)
-        case MethodIdentifier.getToken.rawValue:
+        case .getToken:
             return handleGetTokenMethodCall(call, result: result)
+        case .trackEvent:
+            return handleTrackEventMethodCall(call, result: result)
+        case .removeUser:
+            return handleRemoveUserMethodCall(call, result: result)
         default:
             return result(FlutterMethodNotImplemented)
         }
@@ -38,8 +57,12 @@ final class MessagingChannel {
         let configuration = RedlinkConfiguration.defaultConfiguration()
         configuration.isLoggingEnabled = true
         Redlink.configure(using: configuration)
-        Redlink.push.delegate = current
-        Redlink.push.registerForPushNotifications(with: RedlinkPushOptions.default())
+        result(nil)
+    }
+
+    private static func handleRegisterForPushMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        Redlink.push.registerForPushNotifications(with: RedlinkPushOptions(authorizationOptions: [.badge, .alert, .sound], useAutomaticConfiguration: false))
+        result(nil)
     }
 
     private static func handleSetUserMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -51,49 +74,111 @@ final class MessagingChannel {
         Redlink.user.companyName = arguments.value(forKey: "companyName") as? String ?? ""
         Redlink.user.customParameters = arguments.value(forKey: "customParameters") as? [String: Any] ?? [:]
         Redlink.user.saveUser()
+        result(nil)
+    }
+    
+    private static func handleRemoveUserMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        Redlink.user.removeUser()
+        result(nil)
+    }
+    
+    private static func handleTrackEventMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let arguments = call.arguments as? NSDictionary else {
+            result(FlutterError(code: "BAD_ARGS", message: "Invalid arguments", details: nil))
+            return
+        }
+        guard let eventName = arguments.value(forKey: "eventName") as? String else {
+            result(FlutterError(code: "BAD_ARGS", message: "`eventName` property required", details: nil))
+            return
+        }
+        guard let parameters = arguments.value(forKey: "parameters") as? [String: Any] else {
+            result(FlutterError(code: "BAD_ARGS", message: "`parameters` property required", details: nil))
+            return
+        }
+        let userData = arguments.value(forKey: "userData") as? String
+        Redlink.analytics.trackEvent(withName: eventName, parameters: parameters, userData: userData)
+        result(nil)
     }
     
     private static func handleGetTokenMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard current.tokenError == nil else {
+            result(FlutterError(code: "PERMISSION", message: "Token fetch failed", details: current.tokenError))
+            return
+        }
         guard let token = current.token else {
-            return current.onToken = { token in
+            current.onToken = { token, error in
+                guard error == nil else {
+                    result(FlutterError(code: "PERMISSION", message: "Token fetch failed", details: error))
+                    return
+                }
                 result(token)
             }
+            return
         }
         result(token)
     }
     
     static func setChannel(_ channel: FlutterMethodChannel) {
         current.channel = channel
+        Redlink.push.delegate = current
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = current
+        }
     }
     
     static func setToken(_ token: String) {
-        current.onToken?(token)
+        current.token = token
+        current.tokenError = nil
+
+        current.onToken?(token, nil)
+        current.onToken = nil
+
+        current.channel?.invokeMethod(MethodIdentifier.onToken.rawValue, arguments: token)
+    }
+
+    static func setTokenError(_ error: Error) {
+        current.token = nil
+        current.tokenError = error
+
+        current.onToken?(nil, error)
+        current.onToken = nil
+
+        current.channel?.invokeMethod(MethodIdentifier.onToken.rawValue, arguments: nil)
     }
 }
 
 // MARK: - RedlinkPushDelegate
 extension MessagingChannel: RedlinkPushDelegate {
-    func didRecieveNotification(userInfo: [AnyHashable : Any]) {
+    func unreachedNotificationIsAvailableToDisplay(userInfo: [AnyHashable : Any], completion: ((Bool) -> Void)) {
+        completion(false)
+    }
+}
+
+// MARK: - RedlinkPushDelegate
+extension MessagingChannel: UNUserNotificationCenterDelegate {
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler(Redlink.push.willPresentNotification(notification, presentationOptions: [.alert, .sound]))
+        sendNotification(userInfo: notification.request.content.userInfo, method: .onMessage)
+    }
+
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        Redlink.push.didReceiveNotificationResponse(response: response)
+        sendNotification(userInfo: response.notification.request.content.userInfo, method: .onResume)
+        completionHandler()
+    }
+
+    func sendNotification(userInfo: [AnyHashable: Any], method: MethodIdentifier) {
         guard let channel = channel else { return }
+
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         if let data = try? JSONSerialization.data(withJSONObject: userInfo, options: .fragmentsAllowed), let _ = try? decoder.decode(Message.self, from: data, at: "data") {
-            channel.invokeMethod(MethodIdentifier.onMessage.rawValue, arguments: userInfo["data"])
+            channel.invokeMethod(method.rawValue, arguments: userInfo["data"])
         } else {
-            channel.invokeMethod(MethodIdentifier.onMessage.rawValue, arguments: userInfo)
+            channel.invokeMethod(method.rawValue, arguments: userInfo)
         }
-    }
-
-    func didOpenNotification(userInfo: [AnyHashable : Any]) {
-
-    }
-
-    func didClickOnActionButton(withIdentifier identifier: String, userInfo: [AnyHashable : Any]) {
-
-    }
-
-    func unreachedNotificationIsAvailableToDisplay(userInfo: [AnyHashable : Any], completion: ((Bool) -> Void)) {
-        // do nothing
     }
 }
 
