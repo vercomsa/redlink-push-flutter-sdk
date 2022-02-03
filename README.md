@@ -1,5 +1,6 @@
 # Redlink Push SDK for iOS
-## About SDK [To uzupełni Redlink]
+## About SDK
+A Flutter plugin to use the [Redlink Push Notifications](https://www.redlink.pl/mobile-push/).
 ## Getting Started
 ### Prerequisites
 - Existing Flutter project
@@ -131,8 +132,6 @@ Besides paramaters you can inject `userData` as Valid JSON String:
 #### General information
 Register `onMessage` callback via `_redlinkMessaging.configure()` to listen for incoming messages.
 This will bring up a permissions dialog for the user to confirm on iOS. It's a no-op on Android.
-#### Custom Actions
-BRAK // TODO: ??
 #### Deeplinking
 Deeplinking works using the official Platform SDK. In order to handle received URL's use:
 
