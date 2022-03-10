@@ -67,11 +67,11 @@ final class MessagingChannel: NSObject {
 
     private static func handleSetUserMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let arguments = call.arguments as? NSDictionary else { return Redlink.user.removeUser() }
-        Redlink.user.email = arguments.value(forKey: "email") as? String ?? ""
-        Redlink.user.firstName = arguments.value(forKey: "firstName") as? String ?? ""
-        Redlink.user.lastName = arguments.value(forKey: "lastName") as? String ?? ""
-        Redlink.user.phone = arguments.value(forKey: "phone") as? String ?? ""
-        Redlink.user.companyName = arguments.value(forKey: "companyName") as? String ?? ""
+        Redlink.user.email = arguments.value(forKey: "email") as? String
+        Redlink.user.firstName = arguments.value(forKey: "firstName") as? String
+        Redlink.user.lastName = arguments.value(forKey: "lastName") as? String
+        Redlink.user.phone = arguments.value(forKey: "phone") as? String
+        Redlink.user.companyName = arguments.value(forKey: "companyName") as? String
         Redlink.user.customParameters = arguments.value(forKey: "customParameters") as? [String: Any] ?? [:]
         Redlink.user.saveUser()
         result(nil)
