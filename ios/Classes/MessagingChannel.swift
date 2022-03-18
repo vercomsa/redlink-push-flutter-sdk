@@ -78,7 +78,9 @@ final class MessagingChannel: NSObject {
     }
     
     private static func handleRemoveUserMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        Redlink.user.removeUser()
+        guard let arguments = call.arguments as? NSDictionary else { return Redlink.user.removeUser() }
+        let deletePushToken = arguments.value(forKey: "deletePushToken") as? Bool ?? false
+        Redlink.user.removeUser(deletePushToken: deletePushToken)
         result(nil)
     }
     

@@ -1,3 +1,9 @@
+## 1.0.3
+
+* Update Redlink iOS framework to 1.1.11
+* Update Redlink Android framework
+* Add `deletePushToken` parameter to `RedlinkUser().removeUser` method
+
 ## 1.0.2
 
 * Update Redlink Android framework

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:redlink_flutter_sdk/redlink_analytics.dart';
 import 'package:redlink_flutter_sdk/redlink_messaging.dart';
+import 'package:redlink_flutter_sdk/redlink_user.dart';
 
 const Color _primaryColor = Color(0xFFD30000);
 
@@ -20,6 +21,8 @@ class _MyAppState extends State<MyApp> {
   String _pushMessageSource;
   List<dynamic> _eventParameters = []..length = 1;
   TextEditingController _eventNameEditingController = TextEditingController();
+  TextEditingController _userNameEditingController = TextEditingController();
+  TextEditingController _userEmailEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -67,16 +70,9 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Redlink Push'),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-              ),
-              child: FlutterLogo(),
-            ),
-          ],
         ),
         body: ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           padding: const EdgeInsets.symmetric(
             vertical: 32.0,
             horizontal: 16.0,
@@ -91,6 +87,11 @@ class _MyAppState extends State<MyApp> {
               height: 48.0,
             ),
             _buildPushMessageSourceSection(),
+            const SizedBox(
+              height: 48.0,
+            ),
+            _buildSetUserDataSection(),
+            _buildUnregisterTokenSection(),
             const SizedBox(
               height: 48.0,
             ),
@@ -117,9 +118,7 @@ class _MyAppState extends State<MyApp> {
           height: 4.0,
         ),
         Center(
-          child: _token != null
-              ? SelectableText(_token)
-              : Text('Waiting for token request to complete'),
+          child: _token != null ? SelectableText(_token) : Text('Waiting for token request to complete'),
         ),
       ],
     );
@@ -138,9 +137,7 @@ class _MyAppState extends State<MyApp> {
           height: 4.0,
         ),
         Center(
-          child: Text(_pushMessage != null
-              ? _pushMessage.toString()
-              : 'Waiting for push notification'),
+          child: Text(_pushMessage != null ? _pushMessage.toString() : 'Waiting for push notification'),
         ),
       ],
     );
@@ -159,9 +156,74 @@ class _MyAppState extends State<MyApp> {
           height: 4.0,
         ),
         Center(
-          child: Text(_pushMessageSource != null
-              ? _pushMessageSource
-              : 'Waiting for push notification'),
+          child: Text(_pushMessageSource != null ? _pushMessageSource : 'Waiting for push notification'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSetUserDataSection() {
+    return Column(
+      children: [
+        Text(
+          'Set user data:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          height: 4.0,
+        ),
+        TextFormField(
+          controller: _userNameEditingController,
+          decoration: InputDecoration(
+            labelText: 'Name',
+          ),
+        ),
+        const SizedBox(
+          height: 4.0,
+        ),
+        TextFormField(
+          controller: _userEmailEditingController,
+          decoration: InputDecoration(
+            labelText: 'Email',
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                final String userName = _userNameEditingController.text;
+                final String email = _userEmailEditingController.text;
+                if (userName.isNotEmpty || email.isNotEmpty) {
+                  RedlinkUser().setUser(
+                    firstName: userName,
+                    email: email,
+                  );
+                }
+              },
+              child: Text(
+                'Set user data',
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUnregisterTokenSection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ElevatedButton(
+          onPressed: () => RedlinkUser().removeUser(
+            deletePushToken: true,
+          ),
+          child: Text(
+            'Unregister device token',
+          ),
         ),
       ],
     );
@@ -206,8 +268,7 @@ class _MyAppState extends State<MyApp> {
                 if (_eventNameEditingController.text.isNotEmpty) {
                   Map<String, dynamic> parametersMap = Map.fromIterable(
                     _eventParameters,
-                    key: (element) =>
-                        'Parameter ${_eventParameters.indexOf(element)}',
+                    key: (element) => 'Parameter ${_eventParameters.indexOf(element)}',
                     value: (element) => element,
                   );
                   RedlinkAnalytics.trackEvent(
@@ -230,8 +291,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 onPressed: () {
                   setState(() {
-                    _eventParameters.length -=
-                        _eventParameters.length > 0 ? 1 : 0;
+                    _eventParameters.length -= _eventParameters.length > 0 ? 1 : 0;
                   });
                 },
               ),

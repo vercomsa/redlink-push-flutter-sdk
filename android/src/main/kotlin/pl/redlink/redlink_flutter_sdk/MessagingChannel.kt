@@ -6,6 +6,8 @@ import pl.redlink.push.analytics.RedlinkAnalytics
 import pl.redlink.push.manager.token.FcmTokenManager
 import pl.redlink.push.manager.user.RedlinkUser
 
+private fun MethodCall.booleanArgument(key: String): Boolean? = argument(key) as? Boolean
+
 private fun MethodCall.stringArgument(key: String): String? = argument(key) as? String
 
 object MessagingChannel {
@@ -39,7 +41,9 @@ object MessagingChannel {
     }
 
     private fun removeUser(call: MethodCall, result: MethodChannel.Result) {
-        RedlinkUser.remove()
+        RedlinkUser.remove(
+            deletePushToken = call.booleanArgument("deletePushToken")
+        )
         result.success(null)
     }
 

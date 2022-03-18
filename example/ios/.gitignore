@@ -32,4 +32,4 @@ Runner/GeneratedPluginRegistrant.*
 !default.perspectivev3
 
 # Fastlane
-fastlane/
+fastlane/report.xml

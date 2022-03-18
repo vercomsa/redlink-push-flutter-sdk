@@ -108,7 +108,11 @@ RedlinkUser.setUser({
 There is also posibility to remove all stored user data. To do that call:
 
 ```dart
-RedlinkUser.removeUser();
+RedlinkUser().removeUser()
+```
+If you want also to unsubscribe user from Redlink Push Notification Services you can also use additional parameter while removing user like so:
+```dart
+RedlinkUser().removeUser(deletePushToken: true)
 ```
 ### Events Creation
 In order to track custom user events use `RedlinkAnalytics` class. It can be accessed by using `trackEvent` static method:
@@ -145,4 +149,3 @@ Deeplinking works using the official Platform SDK. In order to handle received U
 `message` will provide information about any information your application might react on by showing additional screen.
 ## Demo application
 Check out the `example` directory for a sample app and see how to integrate Redlink Push Notifications.
-## Contact [To uzupełni Redlink]

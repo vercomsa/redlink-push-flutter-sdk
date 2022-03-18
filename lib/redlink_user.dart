@@ -18,9 +18,14 @@ class RedlinkUser {
     );
   }
 
-  void removeUser() {
+  void removeUser({
+    bool? deletePushToken,
+  }) {
     ChannelUtil.invokeMethod(
       method: ChannelMethod.removeUser,
+      arguments: {
+        "deletePushToken": deletePushToken,
+      },
     );
   }
 }
