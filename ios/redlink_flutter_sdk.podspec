@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'redlink_flutter_sdk'
-  s.version          = '1.0.3'
+  s.version          = '1.0.4'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.

@@ -1,3 +1,7 @@
+## 1.0.4
+
+* Update Redlink Android framework
+
 ## 1.0.3
 
 * Update Redlink iOS framework to 1.1.11
