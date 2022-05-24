@@ -1,7 +1,7 @@
 name: redlink_flutter_sdk
 description: Flutter plugin for Redlink
 homepage: https://www.redlink.pl/mobile-push/
-version: 1.0.4
+version: 1.0.5
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
