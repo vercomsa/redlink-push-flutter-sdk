@@ -6,19 +6,21 @@ import 'package:redlink_flutter_sdk/redlink_user.dart';
 const Color _primaryColor = Color(0xFFD30000);
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp();
+
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   RedlinkMessaging _sdk = RedlinkMessaging();
-  String _token;
-  Map<String, dynamic> _pushMessage;
-  String _pushMessageSource;
+  String? _token;
+  Map<String, dynamic>? _pushMessage;
+  String? _pushMessageSource;
   List<dynamic> _eventParameters = []..length = 1;
   TextEditingController _eventNameEditingController = TextEditingController();
   TextEditingController _userNameEditingController = TextEditingController();
@@ -27,10 +29,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initRedlinkSDK();
+    _initRedlinkSDK();
   }
 
-  void initRedlinkSDK() async {
+  void _initRedlinkSDK() async {
     await _sdk.configure(
       onLaunch: (message) {
         setState(() {
@@ -52,11 +54,17 @@ class _MyAppState extends State<MyApp> {
       },
     );
     await _sdk.registerForPush();
-    await _sdk.getToken().then((value) {
-      setState(
-        () => _token = value,
-      );
-    });
+    await _sdk.getToken().then(
+      (value) {
+        setState(
+          () => _token = value,
+        );
+      },
+      onError: (error) {
+        _token = null;
+        print(error.toString());
+      },
+    );
     _sdk.onTokenRefresh.listen((value) {
       setState(
         () => _token = value,
@@ -106,6 +114,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _buildTokenSection() {
+    final String? token = _token;
     return Column(
       children: [
         Text(
@@ -118,7 +127,7 @@ class _MyAppState extends State<MyApp> {
           height: 4.0,
         ),
         Center(
-          child: _token != null ? SelectableText(_token) : Text('Waiting for token request to complete'),
+          child: token != null ? SelectableText(token) : Text('Waiting for token request to complete'),
         ),
       ],
     );
@@ -144,6 +153,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _buildPushMessageSourceSection() {
+    final String? pushMessageSource = _pushMessageSource;
     return Column(
       children: [
         Text(
@@ -156,7 +166,7 @@ class _MyAppState extends State<MyApp> {
           height: 4.0,
         ),
         Center(
-          child: Text(_pushMessageSource != null ? _pushMessageSource : 'Waiting for push notification'),
+          child: Text(pushMessageSource != null ? pushMessageSource : 'Waiting for push notification'),
         ),
       ],
     );

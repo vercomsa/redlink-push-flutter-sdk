@@ -72,6 +72,7 @@ final class MessagingChannel: NSObject {
         Redlink.user.lastName = arguments.value(forKey: "lastName") as? String
         Redlink.user.phone = arguments.value(forKey: "phone") as? String
         Redlink.user.companyName = arguments.value(forKey: "companyName") as? String
+        Redlink.user.externalId = arguments.value(forKey: "externalId") as? String
         Redlink.user.customParameters = arguments.value(forKey: "customParameters") as? [String: Any] ?? [:]
         Redlink.user.saveUser()
         result(nil)
@@ -103,14 +104,14 @@ final class MessagingChannel: NSObject {
     }
     
     private static func handleGetTokenMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard current.tokenError == nil else {
-            result(FlutterError(code: "PERMISSION", message: "Token fetch failed", details: current.tokenError))
+        guard current.tokenError == nil else {            
+            result(FlutterError(code: "PERMISSION", message: current.tokenError?.localizedDescription ?? "Token fetch failed", details: nil))
             return
         }
         guard let token = current.token else {
             current.onToken = { token, error in
                 guard error == nil else {
-                    result(FlutterError(code: "PERMISSION", message: "Token fetch failed", details: error))
+                    result(FlutterError(code: "PERMISSION", message: error?.localizedDescription ?? "Token fetch failed", details: nil))
                     return
                 }
                 result(token)

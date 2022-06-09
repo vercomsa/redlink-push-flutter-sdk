@@ -2,7 +2,7 @@ PODS:
   - Flutter (1.0.0)
   - Redlink (1.1.13):
     - SQLite.swift (= 0.13.2)
-  - redlink_flutter_sdk (1.0.5):
+  - redlink_flutter_sdk (1.0.6):
     - Flutter
     - Redlink (= 1.1.13)
   - SQLite.swift (0.13.2):
@@ -11,7 +11,6 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - Redlink (= 1.1.13)
   - redlink_flutter_sdk (from `.symlinks/plugins/redlink_flutter_sdk/ios`)
 
 SPEC REPOS:
@@ -28,9 +27,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   Redlink: c3f9a89aac6ea41a116152c9dd55f4c7132e415f
-  redlink_flutter_sdk: 691e4f95e9baa4b055fc49e069369d121f99c32a
+  redlink_flutter_sdk: 82aa6e21e0719078c9eadeb1867de0c4cf393f86
   SQLite.swift: 4fc2be46c36392e3b87afe6fe7f1801c1daa07ef
 
-PODFILE CHECKSUM: d42cba30031efb444c3ff4955979c6cf1468e678
+PODFILE CHECKSUM: 56626f5ff168128f756b43a7bf23978f53a0daf6
 
 COCOAPODS: 1.11.3

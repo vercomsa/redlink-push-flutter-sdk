@@ -6,6 +6,8 @@ class RedlinkUser {
     String? lastName,
     String? email,
     String? phoneNumber,
+    String? companyName,
+    String? externalId,
   }) {
     ChannelUtil.invokeMethod(
       method: ChannelMethod.setUser,
@@ -14,6 +16,8 @@ class RedlinkUser {
         "lastName": lastName,
         "email": email,
         "phone": phoneNumber,
+        "companyName": companyName,
+        "externalId": externalId,
       },
     );
   }

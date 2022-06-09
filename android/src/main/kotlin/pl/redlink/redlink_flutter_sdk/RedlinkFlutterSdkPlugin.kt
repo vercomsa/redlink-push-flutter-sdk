@@ -108,8 +108,8 @@ class RedlinkFlutterSdkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         // no implementation needed
     }
 
-    override fun onNewIntent(intent: Intent?): Boolean {
-        intent?.getExtraPushMessage()?.let { pushMessage ->
+    override fun onNewIntent(intent: Intent): Boolean {
+        intent.getExtraPushMessage()?.let { pushMessage ->
             handleOnResume(pushMessage)
             return true
         }

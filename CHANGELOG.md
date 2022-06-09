@@ -1,3 +1,9 @@
+## 1.0.6
+
+* Fix iOS simulator problem
+* Update Redlink Android framework
+* Add Flutter 3.0 support
+
 ## 1.0.5
 
 * Update Redlink iOS framework

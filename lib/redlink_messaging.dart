@@ -61,7 +61,7 @@ class RedlinkMessaging {
 
   /// Returns the push token.
   Future<String?> getToken() async {
-    return await ChannelUtil.invokeMethod<String>(
+    return ChannelUtil.invokeMethod<String>(
       method: ChannelMethod.getToken,
     );
   }

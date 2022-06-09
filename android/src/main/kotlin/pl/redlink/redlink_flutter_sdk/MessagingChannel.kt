@@ -29,6 +29,8 @@ object MessagingChannel {
                 .firstName(call.stringArgument("firstName").orEmpty())
                 .lastName(call.stringArgument("lastName").orEmpty())
                 .phone(call.stringArgument("phone").orEmpty())
+                .companyName(call.stringArgument("companyName").orEmpty())
+                .externalId(call.stringArgument("externalId").orEmpty())
                 .save()
         result.success(null)
     }
