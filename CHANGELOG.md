@@ -1,3 +1,7 @@
+## 1.0.7
+
+* Update Firebase Messaging Android dependency to 23.0.6
+
 ## 1.0.6
 
 * Fix iOS simulator problem

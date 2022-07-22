@@ -1,4 +1,4 @@
-# Redlink Push SDK for iOS
+# Redlink Push SDK for Flutter
 ## About SDK
 A Flutter plugin to use the [Redlink Push Notifications](https://www.redlink.pl/mobile-push/).
 ## Getting Started
@@ -9,8 +9,8 @@ A Flutter plugin to use the [Redlink Push Notifications](https://www.redlink.pl/
 ### Android Integration
 To integrate your plugin into the Android part of your app, follow these steps:
 #### Firebase platform integration
-Redlink push is based on firebase platform. To configure it on Android check the [documentation]( https://firebase.google.com/docs/android/setup)
-#### Gradle setup
+Redlink push is based on Firebase platform. To configure it on Android check the [documentation]( https://firebase.google.com/docs/android/setup)
+#### Provide required string resources
 Add required tokens to `*.xml` resources, obtained from the Redlink dashboard.
 
 ```xml
@@ -19,7 +19,7 @@ Add required tokens to `*.xml` resources, obtained from the Redlink dashboard.
 <string name="redlink_secret"></string>
 <string name="redlink_events_token"></string>
 ```
-Add required firebase sender id, obtained from the Firebase dashboard (`Settings -> Cloud Messaging -> Sender ID`)
+Add required Firebase Sender ID, obtained from the Firebase dashboard (`Settings -> Cloud Messaging -> Sender ID`)
 ```xml
 <string name="fcm_sender_id"></string>
 ```
@@ -73,7 +73,7 @@ class NotificationServiceExtension: RedlinkNotificationServiceExtension {
 To use this plugin, add `redlink_flutter_sdk` as a dependency in your pubspec.yaml file:
 ```yaml
 dependencies:
-    redlink_flutter_sdk: ^1.0.6
+    redlink_flutter_sdk: ^1.0.7
 ```
 ## Usage
 From your Dart code, you need to import the plugin and instantiate it:
