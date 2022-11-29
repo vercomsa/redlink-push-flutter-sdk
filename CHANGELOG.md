@@ -1,3 +1,6 @@
+## 1.1.1
+
+* Implement Redlink Android SDK 1.11.0 dependency
 ## 1.1.0
 
 * Enhance support for Android 12 & 13
