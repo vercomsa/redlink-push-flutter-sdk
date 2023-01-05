@@ -73,7 +73,7 @@ class NotificationServiceExtension: RedlinkNotificationServiceExtension {
 To use this plugin, add `redlink_flutter_sdk` as a dependency in your pubspec.yaml file:
 ```yaml
 dependencies:
-    redlink_flutter_sdk: ^1.1.3
+    redlink_flutter_sdk: ^1.1.5
 ```
 ## Usage
 From your Dart code, you need to import the plugin and instantiate it:
