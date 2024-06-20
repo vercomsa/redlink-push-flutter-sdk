@@ -32,7 +32,9 @@ class RedlinkFlutterSdkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     private val pushBroadcast: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (context?.isApplicationInForeground() == true) {
-                intent?.getExtraPushMessage()?.let(::handleOnMessage)
+                kotlin.runCatching {
+                    intent?.getExtraPushMessage()?.let(::handleOnMessage)
+                }
             }
         }
     }

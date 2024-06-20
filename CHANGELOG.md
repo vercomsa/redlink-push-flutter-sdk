@@ -1,3 +1,7 @@
+## 1.1.7
+
+Implement Redlink Android SDK 1.14.0 dependency
+
 ## 1.1.5
 
 * Implement Redlink Android SDK 1.12.3 dependency
