@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:redlink_flutter_sdk/redlink_analytics.dart';
 import 'package:redlink_flutter_sdk/redlink_messaging.dart';
@@ -100,6 +101,7 @@ class _MyAppState extends State<MyApp> {
             ),
             _buildSetUserDataSection(),
             _buildUnregisterTokenSection(),
+            _buildDetachTokenSection(),
             const SizedBox(
               height: 48.0,
             ),
@@ -233,6 +235,20 @@ class _MyAppState extends State<MyApp> {
           ),
           child: Text(
             'Unregister device token',
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetachTokenSection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ElevatedButton(
+          onPressed: () => RedlinkUser().detachToken(),
+          child: Text(
+            'Detach token',
           ),
         ),
       ],

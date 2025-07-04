@@ -10,6 +10,7 @@ final class MessagingChannel: NSObject {
         case configureSDK
         case registerForPush // ios only
 
+        case detachToken
         case getToken
         case setUser
         case removeUser
@@ -17,7 +18,7 @@ final class MessagingChannel: NSObject {
 
         // callbacks
         case onMessage
-        case onLaunch // android only
+        case onLaunch // Android only
         case onResume
         case onToken
 
@@ -38,6 +39,8 @@ final class MessagingChannel: NSObject {
         switch method {
         case .configureSDK:
             return handleConfigureSDKMethodCall(call, result: result)
+        case .detachToken:
+             return handleDetachTokenMethodCall(call, result: result)
         case .registerForPush:
             return handleRegisterForPushMethodCall(call, result: result)
         case .setUser:
@@ -57,6 +60,11 @@ final class MessagingChannel: NSObject {
         let configuration = RedlinkConfiguration.defaultConfiguration()
         configuration.isLoggingEnabled = true
         Redlink.configure(using: configuration)
+        result(nil)
+    }
+
+    private static func handleDetachTokenMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        Redlink.user.detachToken()
         result(nil)
     }
 

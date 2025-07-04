@@ -1,16 +1,17 @@
 PODS:
   - Flutter (1.0.0)
-  - Redlink (1.1.13):
-    - SQLite.swift (= 0.13.2)
-  - redlink_flutter_sdk (1.0.7):
+  - Redlink (1.1.17):
+    - SQLite.swift (= 0.15.3)
+  - redlink_flutter_sdk (1.3.0):
     - Flutter
-    - Redlink (= 1.1.13)
-  - SQLite.swift (0.13.2):
-    - SQLite.swift/standard (= 0.13.2)
-  - SQLite.swift/standard (0.13.2)
+    - Redlink (= 1.1.17)
+  - SQLite.swift (0.15.3):
+    - SQLite.swift/standard (= 0.15.3)
+  - SQLite.swift/standard (0.15.3)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - Redlink
   - redlink_flutter_sdk (from `.symlinks/plugins/redlink_flutter_sdk/ios`)
 
 SPEC REPOS:
@@ -25,11 +26,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/redlink_flutter_sdk/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  Redlink: c3f9a89aac6ea41a116152c9dd55f4c7132e415f
-  redlink_flutter_sdk: 5c3c793d617cfc66727c267a5ffb11c1a3e8a5e2
-  SQLite.swift: 4fc2be46c36392e3b87afe6fe7f1801c1daa07ef
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Redlink: c40ed550e4b1125a614dc827be5f6f5318906e37
+  redlink_flutter_sdk: 82b8f4ee6536efd7379e24a1d08f586dfa1b3559
+  SQLite.swift: 8d054987f02728cc912b0eb5a9659650573a65a2
 
-PODFILE CHECKSUM: 56626f5ff168128f756b43a7bf23978f53a0daf6
+PODFILE CHECKSUM: 5be516d04909c1050c362d86817222346fd25628
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.16.2

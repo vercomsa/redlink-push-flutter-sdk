@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import com.google.firebase.FirebaseApp
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -18,6 +19,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.NewIntentListener
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import pl.redlink.push.RedlinkApp
+import pl.redlink.push.extension.isApplicationInForeground
 import pl.redlink.push.fcm.PushMessage
 import pl.redlink.push.fcm.RedlinkFirebaseMessagingService
 import pl.redlink.push.lifecycle.InAppPushHandler
@@ -59,8 +61,20 @@ class RedlinkFlutterSdkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         channel = MethodChannel(binaryMessenger, MessagingChannel.channelIdentifier)
         channel?.setMethodCallHandler(this)
 
-        (context.applicationContext as? Application)
-                ?.registerReceiver(pushBroadcast, IntentFilter(RedlinkFirebaseMessagingService.PUSH_ACTION))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            (context.applicationContext as? Application)
+                ?.registerReceiver(
+                    pushBroadcast,
+                    IntentFilter(RedlinkFirebaseMessagingService.PUSH_ACTION),
+                    Context.RECEIVER_EXPORTED
+                )
+        } else {
+            (context.applicationContext as? Application)
+                ?.registerReceiver(
+                    pushBroadcast,
+                    IntentFilter(RedlinkFirebaseMessagingService.PUSH_ACTION)
+                )
+        }
 
         RedlinkApp.customInAppPushHandler(customInAppPushHandler)
     }
@@ -75,17 +89,26 @@ class RedlinkFlutterSdkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
     private fun handleOnLaunch() {
         onLaunchPushMessage?.let { pushMessage ->
-            channel?.invokeMethod(MessagingChannel.MethodIdentifier.ON_LAUNCH.identifier, pushMessage.data)
+            channel?.invokeMethod(
+                MessagingChannel.MethodIdentifier.ON_LAUNCH.identifier,
+                pushMessage.data
+            )
             onLaunchPushMessage = null
         }
     }
 
     private fun handleOnResume(pushMessage: PushMessage) {
-        channel?.invokeMethod(MessagingChannel.MethodIdentifier.ON_RESUME.identifier, pushMessage.data)
+        channel?.invokeMethod(
+            MessagingChannel.MethodIdentifier.ON_RESUME.identifier,
+            pushMessage.data
+        )
     }
 
     private fun handleOnMessage(pushMessage: PushMessage) {
-        channel?.invokeMethod(MessagingChannel.MethodIdentifier.ON_MESSAGE.identifier, pushMessage.data)
+        channel?.invokeMethod(
+            MessagingChannel.MethodIdentifier.ON_MESSAGE.identifier,
+            pushMessage.data
+        )
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -118,33 +141,5 @@ class RedlinkFlutterSdkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         return false
     }
 
-    private fun Intent.getExtraPushMessage(): PushMessage? =
-            getParcelableExtra(RedlinkFirebaseMessagingService.EXTRA_PUSH_MESSAGE) as? PushMessage
-                    ?: getParcelableExtra(EXTRA_PUSH_MESSAGE) as? PushMessage
-
-    companion object {
-
-        // NotificationActionBroadcast is internal in pl.redlink.push.fcm
-        private const val /*pl.redlink.push.fcm.NotificationActionBroadcast.*/EXTRA_PUSH_MESSAGE =
-                "pl.redlink.push.fcm.extra-push-message"
-
-        // This static function is optional and equivalent to onAttachedToEngine. It supports the old
-        // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
-        // plugin registration via this function while apps migrate to use the new Android APIs
-        // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
-        //
-        // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
-        // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
-        // depending on the user's project. onAttachedToEngine or registerWith must both be defined
-        // in the same class.
-        @JvmStatic
-        fun registerWith(registrar: Registrar) {
-            RedlinkFlutterSdkPlugin().apply {
-                registrar.addNewIntentListener(this)
-                onAttachedToEngine(registrar.context(), registrar.messenger())
-            }
-        }
-
-    }
-
+    private fun Intent.getExtraPushMessage(): PushMessage? = PushMessage.fromIntent(this)
 }

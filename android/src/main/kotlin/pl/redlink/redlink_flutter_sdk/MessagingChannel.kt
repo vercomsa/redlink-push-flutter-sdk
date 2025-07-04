@@ -16,11 +16,17 @@ object MessagingChannel {
 
     fun handleMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
+            MethodIdentifier.DETACH_TOKEN.identifier -> detachToken(call, result)
             MethodIdentifier.SET_USER.identifier -> setUser(call, result)
             MethodIdentifier.GET_TOKEN.identifier -> handleGetTokenMethod(call, result)
             MethodIdentifier.REMOVE_USER.identifier -> removeUser(call, result)
             MethodIdentifier.TRACK_EVENT.identifier -> trackEvent(call, result)
         }
+    }
+
+    private fun detachToken(call: MethodCall, result: MethodChannel.Result) {
+        RedlinkUser.detachToken()
+        result.success(null)
     }
 
     private fun setUser(call: MethodCall, result: MethodChannel.Result) {
@@ -58,11 +64,12 @@ object MessagingChannel {
     ) {
 
         CONFIGURE_SDK("configureSDK"),
+        DETACH_TOKEN("detachToken"),
         GET_TOKEN("getToken"),
         ON_LAUNCH("onLaunch"),
         ON_MESSAGE("onMessage"),
         ON_RESUME("onResume"),
-        ON_TOKEN("onToken"),        
+        ON_TOKEN("onToken"),
         REMOVE_USER("removeUser"),
         SET_USER("setUser"),
         TRACK_EVENT("trackEvent"),

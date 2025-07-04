@@ -1,3 +1,7 @@
+## 1.1.9
+
+Add detachToken function
+
 ## 1.1.8
 
 Implement Redlink Android SDK 1.14.1 dependency
