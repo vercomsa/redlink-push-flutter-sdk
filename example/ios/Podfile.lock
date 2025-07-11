@@ -2,7 +2,7 @@ PODS:
   - Flutter (1.0.0)
   - Redlink (1.1.17):
     - SQLite.swift (= 0.15.3)
-  - redlink_flutter_sdk (1.3.0):
+  - redlink_flutter_sdk (1.3.1):
     - Flutter
     - Redlink (= 1.1.17)
   - SQLite.swift (0.15.3):

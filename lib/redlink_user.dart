@@ -1,6 +1,12 @@
 import 'package:redlink_flutter_sdk/utils/channel_util.dart';
 
 class RedlinkUser {
+  void detachToken() {
+    ChannelUtil.invokeMethod(
+      method: ChannelMethod.detachToken,
+    );
+  }
+
   void setUser({
     String? firstName,
     String? lastName,

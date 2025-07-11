@@ -1,3 +1,7 @@
+## 1.3.1
+
+* Fix Android build issues
+
 ## 1.1.9
 
 Add detachToken function

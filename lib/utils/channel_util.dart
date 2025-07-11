@@ -19,6 +19,7 @@ class ChannelUtil {
 
 enum ChannelMethod {
   configureSDK,
+  detachToken,
   registerForPush,
   getToken,
   onLaunch,
@@ -35,6 +36,8 @@ extension ChannelMethodExtensions on ChannelMethod {
     switch (this) {
       case ChannelMethod.configureSDK:
         return 'configureSDK';
+      case ChannelMethod.detachToken:
+        return 'detachToken';
       case ChannelMethod.registerForPush:
         return 'registerForPush';
       case ChannelMethod.getToken:

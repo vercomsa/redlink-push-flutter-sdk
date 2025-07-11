@@ -24,10 +24,11 @@ rootProject.allprojects {
     }
 }
 
-apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.android.library'
 
 android {
+    namespace "pl.redlink.redlink_flutter_sdk"
     compileSdk 34
 
     sourceSets {
@@ -38,6 +39,15 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 

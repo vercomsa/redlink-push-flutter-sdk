@@ -73,7 +73,7 @@ class NotificationServiceExtension: RedlinkNotificationServiceExtension {
 To use this plugin, add `redlink_flutter_sdk` as a dependency in your pubspec.yaml file:
 ```yaml
 dependencies:
-    redlink_flutter_sdk: ^1.1.9
+    redlink_flutter_sdk: ^1.3.1
 ```
 ## Usage
 From your Dart code, you need to import the plugin and instantiate it:
@@ -105,7 +105,7 @@ RedlinkUser.setUser({
 });
 ```
 ### User Removal
-There is also posibility to remove all stored user data. To do that call:
+There is also possibility to remove all stored user data. To do that call:
 
 ```dart
 RedlinkUser().removeUser()
@@ -113,6 +113,11 @@ RedlinkUser().removeUser()
 If you want also to unsubscribe user from Redlink Push Notification Services you can also use additional parameter while removing user like so:
 ```dart
 RedlinkUser().removeUser(deletePushToken: true)
+```
+
+If you just want to detach token:
+```dart
+RedlinkUser().detachToken()
 ```
 ### Events Creation
 In order to track custom user events use `RedlinkAnalytics` class. It can be accessed by using `trackEvent` static method:
