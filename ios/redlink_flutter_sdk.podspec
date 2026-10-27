@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'redlink_flutter_sdk'
-  s.version          = '1.3.1'
+  s.version          = '1.3.2'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -15,7 +15,7 @@ A new flutter plugin project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'Redlink', '1.1.17'
+  s.dependency 'Redlink', '1.1.22'
   
   s.platform = :ios, '14.0'
 

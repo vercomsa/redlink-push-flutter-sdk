@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serialNumber="urn:uuid:58a02392-1305-48a4-9c1e-16b82e64d3c4" version="1" xmlns="http://cyclonedx.org/schema/bom/1.6">
+  <metadata>
+    <timestamp>2026-10-27T10:35:17Z</timestamp>
+    <lifecycles>
+      <lifecycle>
+        <phase>build</phase>
+      </lifecycle>
+    </lifecycles>
+    <tools>
+      <components>
+        <component type="application">
+          <supplier>
+            <name>Vercom S.A.</name>
+          </supplier>
+          <name>update_public_docs.sh</name>
+        </component>
+      </components>
+    </tools>
+    <authors>
+      <author>
+        <name>Vercom S.A.</name>
+        <email>redlink.push@vercom.pl</email>
+      </author>
+    </authors>
+    <component type="library" bom-ref="pkg:pub/redlink_flutter_sdk@1.3.2">
+      <supplier>
+        <name>Vercom S.A.</name>
+        <url>https://www.vercom.pl</url>
+      </supplier>
+      <name>redlink_flutter_sdk</name>
+      <version>1.3.2</version>
+      <description>RedLink push notification plugin for Flutter</description>
+      <licenses>
+        <license>
+          <name>Modified MIT License</name>
+        </license>
+      </licenses>
+      <purl>pkg:pub/redlink_flutter_sdk@1.3.2</purl>
+      <externalReferences>
+        <reference type="vcs">
+          <url>https://github.com/vercomsa/redlink-push-flutter-sdk</url>
+        </reference>
+        <reference type="distribution">
+          <url>https://pub.dev/packages/redlink_flutter_sdk/versions/1.3.2</url>
+        </reference>
+        <reference type="website">
+          <url>https://www.redlink.pl/mobile-push/</url>
+        </reference>
+        <reference type="security-contact">
+          <url>mailto:soc@vercom.pl</url>
+        </reference>
+        <reference type="release-notes">
+          <url>https://github.com/vercomsa/redlink-push-flutter-sdk/blob/master/CHANGELOG.md</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <manufacturer>
+      <name>Vercom S.A.</name>
+      <url>https://www.vercom.pl</url>
+    </manufacturer>
+    <supplier>
+      <name>Vercom S.A.</name>
+      <url>https://www.vercom.pl</url>
+    </supplier>
+  </metadata>
+  <components>
+    <component type="framework" bom-ref="flutter">
+      <name>Flutter</name>
+      <licenses>
+        <license>
+          <id>BSD-3-Clause</id>
+        </license>
+      </licenses>
+      <externalReferences>
+        <reference type="vcs">
+          <url>https://github.com/flutter/flutter</url>
+        </reference>
+      </externalReferences>
+      <properties>
+        <property name="redlink:versionConstraint">&gt;=3.0.0</property>
+        <property name="redlink:note">Provided by the integrating app</property>
+      </properties>
+    </component>
+    <component type="library" bom-ref="pkg:cocoapods/Redlink@1.1.22">
+      <supplier>
+        <name>Vercom S.A.</name>
+        <url>https://www.vercom.pl</url>
+      </supplier>
+      <name>Redlink</name>
+      <version>1.1.22</version>
+      <scope>required</scope>
+      <licenses>
+        <license>
+          <name>Proprietary</name>
+        </license>
+      </licenses>
+      <purl>pkg:cocoapods/Redlink@1.1.22</purl>
+      <externalReferences>
+        <reference type="vcs">
+          <url>https://github.com/vercomsa/redlink-push-ios-sdk</url>
+        </reference>
+        <reference type="bom">
+          <url>https://raw.githubusercontent.com/vercomsa/redlink-push-ios-sdk/master/sbom.cdx.json</url>
+        </reference>
+      </externalReferences>
+      <properties>
+        <property name="redlink:platform">ios</property>
+      </properties>
+    </component>
+    <component type="library" bom-ref="pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@2.1.0">
+      <group>org.jetbrains.kotlin</group>
+      <name>kotlin-stdlib-jdk7</name>
+      <version>2.1.0</version>
+      <scope>required</scope>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <purl>pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@2.1.0</purl>
+      <properties>
+        <property name="redlink:platform">android</property>
+      </properties>
+    </component>
+    <component type="library" bom-ref="pkg:maven/androidx.appcompat/appcompat@1.7.0">
+      <group>androidx.appcompat</group>
+      <name>appcompat</name>
+      <version>1.7.0</version>
+      <scope>required</scope>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <purl>pkg:maven/androidx.appcompat/appcompat@1.7.0</purl>
+      <properties>
+        <property name="redlink:platform">android</property>
+      </properties>
+    </component>
+    <component type="library" bom-ref="pkg:maven/com.google.firebase/firebase-messaging@24.1.0">
+      <group>com.google.firebase</group>
+      <name>firebase-messaging</name>
+      <version>24.1.0</version>
+      <scope>required</scope>
+      <licenses>
+        <license>
+          <id>Apache-2.0</id>
+        </license>
+      </licenses>
+      <purl>pkg:maven/com.google.firebase/firebase-messaging@24.1.0</purl>
+      <properties>
+        <property name="redlink:platform">android</property>
+      </properties>
+    </component>
+    <component type="library" bom-ref="pkg:maven/pl.redlink/push@1.16.12">
+      <supplier>
+        <name>Vercom S.A.</name>
+        <url>https://www.vercom.pl</url>
+      </supplier>
+      <group>pl.redlink</group>
+      <name>push</name>
+      <version>1.16.12</version>
+      <scope>required</scope>
+      <purl>pkg:maven/pl.redlink/push@1.16.12</purl>
+      <externalReferences>
+        <reference type="vcs">
+          <url>https://github.com/vercomsa/redlink-push-android-sdk</url>
+        </reference>
+        <reference type="bom">
+          <url>https://raw.githubusercontent.com/vercomsa/redlink-push-android-sdk/master/sbom/bom.json</url>
+        </reference>
+      </externalReferences>
+      <properties>
+        <property name="redlink:platform">android</property>
+      </properties>
+    </component>
+  </components>
+  <dependencies>
+    <dependency ref="pkg:pub/redlink_flutter_sdk@1.3.2">
+      <dependency ref="flutter" />
+      <dependency ref="pkg:cocoapods/Redlink@1.1.22" />
+      <dependency ref="pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@2.1.0" />
+      <dependency ref="pkg:maven/androidx.appcompat/appcompat@1.7.0" />
+      <dependency ref="pkg:maven/com.google.firebase/firebase-messaging@24.1.0" />
+      <dependency ref="pkg:maven/pl.redlink/push@1.16.12" />
+    </dependency>
+    <dependency ref="flutter" />
+    <dependency ref="pkg:cocoapods/Redlink@1.1.22" />
+    <dependency ref="pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@2.1.0" />
+    <dependency ref="pkg:maven/androidx.appcompat/appcompat@1.7.0" />
+    <dependency ref="pkg:maven/com.google.firebase/firebase-messaging@24.1.0" />
+    <dependency ref="pkg:maven/pl.redlink/push@1.16.12" />
+  </dependencies>
+</bom>

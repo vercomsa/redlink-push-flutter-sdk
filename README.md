@@ -73,7 +73,7 @@ class NotificationServiceExtension: RedlinkNotificationServiceExtension {
 To use this plugin, add `redlink_flutter_sdk` as a dependency in your pubspec.yaml file:
 ```yaml
 dependencies:
-    redlink_flutter_sdk: ^1.3.1
+    redlink_flutter_sdk: ^1.3.2
 ```
 ## Usage
 From your Dart code, you need to import the plugin and instantiate it:
@@ -154,3 +154,14 @@ Deeplinking works using the official Platform SDK. In order to handle received U
 `message` will provide information about any information your application might react on by showing additional screen.
 ## Demo application
 Check out the `example` directory for a sample app and see how to integrate Redlink Push Notifications.
+
+## Software Bill of Materials (SBOM)
+
+A CycloneDX SBOM for the `redlink_flutter_sdk` plugin is published under `sbom/`
+(`bom.json`, `bom.xml`) and updated with every release. It links to the SBOMs of the native
+Redlink iOS and Android SDKs that the plugin wraps.
+
+## Security and changes
+
+- Vulnerability reporting policy: [SECURITY.md](SECURITY.md)
+- Release history: [CHANGELOG.md](CHANGELOG.md)
